@@ -32,20 +32,54 @@
 #   =======================================================================
 
 # ************************Variable*********************************************
+
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-tools_version=$1
+app_path="${script_path}/.."
 
-bash ${script_path}/prepare_model.sh ${tools_version}
+main()
+{
+    if [ ! -n ${DDK_HOME} ];then
+        echo "Can not find DDK_HOME env, please set it in environment!."
+        exit 1
+    fi
 
-if [ $? -ne 0 ];then
-    exit 1
-fi
+    echo "Clear app build path..."
+    rm -rf ${app_path}/videoanalysiscarapp/out
+    atlas_target=`grep "TARGET" ${DDK_HOME}/ddk_info | awk -F '"' '{print $4}'`
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: can not get TARGET from ${DDK_HOME}/ddk_info, please check your env"
+        return 1
+    fi
 
-zip -r ${script_path}/videoanalysiscarapp videoanalysiscarapp MyModel
-if [ $? -ne 0 ];then
-    echo "[ERROR]: pack failed."
-    exit 1
-fi
-echo "pack successfully"
-exit 0
+    atlas_target=`echo ${atlas_target} | sed 's/ //g' `
+    echo "Build main..."
+    make mode=${atlas_target} -C ${app_path}/videoanalysiscarapp 1>/dev/null
+    if [ $? -ne 0 ];then
+        exit 1
+    fi
+
+    for file in `find ${app_path}/videoanalysiscarapp -name "Makefile"`
+    do
+        if [ ${file} == "${app_path}/videoanalysiscarapp/Makefile" ];then
+            continue
+        fi
+        path=`dirname ${file}`
+        lib_path_name=`basename ${path}`
+        echo "Build ${lib_path_name} lib..."
+        make mode=${atlas_target} clean -C ${path} 1>/dev/null
+        if [ $? -ne 0 ];then
+            exit 1
+        fi
+        make mode=${atlas_target} install -C ${path} 1>/dev/null
+
+        if [ $? -ne 0 ];then
+            exit 1
+        fi
+    done
+
+    echo "Finish to Build app."
+    exit 0
+}
+
+main

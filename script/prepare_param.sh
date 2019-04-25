@@ -32,47 +32,47 @@
 #   =======================================================================
 
 # ************************Variable*********************************************
+
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-tools_version=$1
+remote_host=$1
+presenter_view_app_name=$2
+channel1=$3
+channel2=$4
 
-common_path="${script_path}/../../common"
 
-. ${common_path}/utils/scripts/func_model.sh
+. ${script_path}/func_util.sh
+. ${script_path}/func_deploy.sh
 
-main()
+app_path="${script_path}/.."
+
+function main()
 {
-    model_name="vgg_ssd"
-    model_remote_path="computer_vision/object_detect"
-    prepare ${model_name} ${model_remote_path}
-    if [ $? -ne 0 ];then
+    if [[ $# -lt 3 ]];then
+        echo "ERROR: invalid command, please check your command format: ./prepare_param.sh host_ip presenter_view_app_name channel1 [channel2]."
         exit 1
     fi
-    model_name="car_type"
-    model_remote_path="computer_vision/classification"
-    prepare ${model_name} ${model_remote_path}
-    if [ $? -ne 0 ];then
+    check_ip_addr ${remote_host}
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: invalid host ip, please check your command format: ./prepare_param.sh host_ip presenter_view_app_name channel1 [channel2]."
         exit 1
     fi
-    model_name="car_color"
-    model_remote_path="computer_vision/classification"
-    prepare ${model_name} ${model_remote_path}
-    if [ $? -ne 0 ];then
+
+    echo "Prepare app configuration..."
+    cp -r ${app_path}/videoanalysiscarapp/graph_deploy.config ${app_path}/videoanalysiscarapp/out/graph.config
+    sed -i "s#\${template_channel1}#${channel1}#g" ${app_path}/videoanalysiscarapp/out/graph.config
+    sed -i "s#\${template_channel2}#${channel2}#g" ${app_path}/videoanalysiscarapp/out/graph.config
+    sed -i "s/\${template_app_name}/${presenter_view_app_name}/g" ${app_path}/videoanalysiscarapp/out/graph.config
+    
+    parse_remote_port
+    
+    upload_file ${app_path}/videoanalysiscarapp/out/graph.config "~/HIAI_PROJECTS/ascend_workspace/videoanalysiscarapp/out"
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: sync ${script_path}/videoanalysiscarapp/graph.config ${remote_host}:./HIAI_PROJECTS/ascend_workspace/videoanalysiscarapp/out failed, please check /var/log/syslog for details."
         exit 1
     fi
-    model_name="car_plate_detection"
-    model_remote_path="computer_vision/object_detect"
-    prepare ${model_name} ${model_remote_path}
-    if [ $? -ne 0 ];then
-        exit 1
-    fi
-    model_name="car_plate_recognition"
-    model_remote_path="computer_vision/classification"
-    prepare ${model_name} ${model_remote_path}
-    if [ $? -ne 0 ];then
-        exit 1
-    fi
+    echo "Finish to prepare videoanalysiscarapp params."
     exit 0
 }
 
-main
+main $*

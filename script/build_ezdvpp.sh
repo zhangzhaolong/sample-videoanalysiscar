@@ -35,15 +35,48 @@
 
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-main()
+download_mode=$1
+ezdvpp_version="1.0.0"
+
+function download_code()
 {
-    if [ ! -n ${DDK_HOME} ];then
-        echo "Can not find DDK_HOME env, please set it in environment!."
-        exit 1
+    if [ -d ${script_path}/ezdvpp ];then
+        echo "EZdvpp code if found..."
+        return 0
+    else
+        if [[ ${download_mode} == "local" ]];then
+            echo "WARNING: no ezdvpp code found."
+            read -p "Do you want to download from internet?(y/n, default:y)" confirm
+            if [[ ${confirm}"X" != "X" && ${confirm} != "y" && ${confirm} != "Y" ]];then
+                echo "ERROR: no ezdvpp code found and no download choice, please put ezdvpp code in ${script_path}/ezdvpp path manually."
+                return 1
+            fi
+        fi
+    fi
+    echo "Download ezdvpp code..."
+    ezdvpp_download_url="https://github.com/Ascend/sdk-ezdvpp/archive/${ezdvpp_version}.tar.gz"
+    wget -O ${script_path}/${ezdvpp_version}.ing ${ezdvpp_download_url} --no-check-certificate
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: download failed, please check ${ezdvpp_download_url} connection."
+        return 1
     fi
 
-    echo "Clear app build path..."
-    rm -rf ${script_path}/videoanalysisapp/out
+    mv ${script_path}/${ezdvpp_version}.ing ${script_path}/${ezdvpp_version}
+    tar -zxvf ${script_path}/${ezdvpp_version} -C ${script_path} 1>/dev/null
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: uncompress ezdvpp tar.gz file failed, please check ${ezdvpp_download_url} connection."
+        return 1
+    fi
+    mv ${script_path}/sdk-ezdvpp-${ezdvpp_version} ${script_path}/ezdvpp
+    rm -rf ${script_path}/${ezdvpp_version}
+    rm -rf ${script_path}/${ezdvpp_version}.ing
+    return 0
+
+}
+
+function build_ezdvpp()
+{
+    echo "Build ezdvpp..."
     atlas_target=`grep "TARGET" ${DDK_HOME}/ddk_info | awk -F '"' '{print $4}'`
     if [[ $? -ne 0 ]];then
         echo "ERROR: can not get TARGET from ${DDK_HOME}/ddk_info, please check your env"
@@ -51,32 +84,33 @@ main()
     fi
 
     atlas_target=`echo ${atlas_target} | sed 's/ //g' `
-    echo "Build main..."
-    make mode=${atlas_target} -C ${script_path}/videoanalysisapp 1>/dev/null
-    if [ $? -ne 0 ];then
-        exit 1
+     make clean mode=${atlas_target} -C ${script_path}/ezdvpp 1>/dev/null
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: compile ezdvpp failed, please check the env."
+        return 1
+    fi
+    make install mode=${atlas_target} -C ${script_path}/ezdvpp 1>/dev/null
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: compile ezdvpp failed, please check the env."
+        return 1
+    fi
+}
+
+main()
+{
+    #download code
+    download_code
+    if [[ $? -ne 0 ]];then
+        return 1
     fi
 
-    for file in `find ${script_path}/videoanalysisapp -name "Makefile"`
-    do
-        if [ ${file} == "${script_path}/videoanalysisapp/Makefile" ];then
-            continue
-        fi
-        path=`dirname ${file}`
-        lib_path_name=`basename ${path}`
-        echo "Build ${lib_path_name} lib..."
-        make mode=${atlas_target} clean -C ${path} 1>/dev/null
-        if [ $? -ne 0 ];then
-            exit 1
-        fi
-        make mode=${atlas_target} install -C ${path} 1>/dev/null
+    build_ezdvpp
 
-        if [ $? -ne 0 ];then
-            exit 1
-        fi
-    done
+    if [[ $? -ne 0 ]];then
+        return 1
+    fi
 
-    echo "Finish to Build app."
+    echo "Finish to Build ezdvpp."
     exit 0
 }
 

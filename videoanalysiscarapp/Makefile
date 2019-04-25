@@ -1,10 +1,10 @@
 TOPDIR      := $(patsubst %,%,$(CURDIR))
-DDK_HOME := /home/b750/tools/che/ddk/ddk
-CC := aarch64-linux-gnu-g++
-CPP := aarch64-linux-gnu-g++
 
+ifndef DDK_HOME
+$(error "Can not find DDK_HOME env, please set it in environment!.")
+endif
 
-LOCAL_MODULE_NAME := main
+LOCAL_MODULE_NAME := ascend_videoanalysiscarapp
 CC_FLAGS := -std=c++11
 
 local_src_files := \
@@ -19,7 +19,15 @@ local_inc_dirs := \
 
 local_shared_libs_dirs := \
 	$(DDK_HOME)/host/lib/ \
-	
+
+ifeq ($(mode),)
+mode=AtlasDK
+endif
+
+ifeq ($(mode), AtlasDK)
+CC := aarch64-linux-gnu-g++
+CPP := aarch64-linux-gnu-g++
+
 local_shared_libs := \
 	hiai_server \
 	hiai_common \
@@ -48,6 +56,26 @@ local_shared_libs := \
 	slog \
 	dl \
 	media_mini
+else ifeq ($(mode), ASIC)
+CC := g++
+CPP := g++
+
+local_shared_libs := \
+	matrix \
+	drvdevdrv \
+	drvdevmm \
+	drvhdc_host \
+	mmpa \
+	crypto \
+	c_sec \
+	pthread \
+	protobuf \
+	profilerclient \
+	slog \
+	dl
+else
+$(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
+endif
 
 Q := @
 		
@@ -74,7 +102,7 @@ do_build: $(LOCAL_LIBRARY) | do_pre_build
 
 $(LOCAL_LIBRARY): $(FULL_C_OBJS) $(FULL_CPP_OBJS) | do_pre_build
 	$(Q)echo [LD] $@
-	$(Q)$(CPP) $(CC_FLAGS) -o $(LOCAL_LIBRARY) $(FULL_C_OBJS) $(FULL_CPP_OBJS) -Wl,--whole-archive  -Wl,--no-whole-archive -Wl,--start-group  -Wl,--end-group $(SHARED_LIBRARIES_DIRS) $(SHARED_LIBRARIES) -Wl,-rpath-link=$(DDK_HOME)/host/lib
+	$(Q)$(CPP) $(CC_FLAGS) -o $(LOCAL_LIBRARY) $(FULL_C_OBJS) $(FULL_CPP_OBJS) -Wl,--whole-archive  -Wl,--no-whole-archive -Wl,--start-group  -Wl,--end-group $(SHARED_LIBRARIES_DIRS) $(SHARED_LIBRARIES) -Wl,-rpath-link=$(DDK_HOME)/host/lib -Wl,-rpath='$$ORIGIN/../../../ascend_lib'
 
 $(FULL_C_OBJS): $(LOCAL_OBJ_PATH)/%.o : $(TOPDIR)/%.c $(TOPDIR)/%.h  | do_pre_build
 	$(Q)echo [CC] $@

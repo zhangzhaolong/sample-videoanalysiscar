@@ -36,42 +36,54 @@
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
 remote_host=$1
-presenter_view_app_name=$2
-channel1=$3
-channel2=$4
+download_mode=$2
 
-common_path="${script_path}/../../common"
+. ${script_path}/func_deploy.sh
+. ${script_path}/func_util.sh
 
-. ${common_path}/utils/scripts/func_util.sh
-. ${common_path}/utils/scripts/func_deploy.sh
+app_path="${script_path}/.."
+
+function modify_graph()
+{
+    echo "Modify presenter server information in graph.config..."
+    cp -r ${app_path}/videoanalysiscarapp/graph_template.config ${app_path}/videoanalysiscarapp/graph_deploy.config
+    presenter_ip=`grep presenter_server_ip ${app_path}/presenterserver/video_analysis/config/config.conf | awk -F '=' '{print $2}' | sed 's/[^0-9.]//g'`
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: get presenter server ip failed, please check ${app_path}/presenterserver/video_analysis/config/config.conf."
+        return 1
+    fi
+    
+    presenter_port=`grep presenter_server_port ${app_path}/presenterserver/video_analysis/config/config.conf | awk -F '=' '{print $2}' | sed 's/[^0-9]//g'`
+    if [[ $? -ne 0 ]];then
+        echo "ERROR: get presenter server port failed, please check ${app_path}/presenterserver/video_analysis/config/config.conf."
+        return 1
+    fi
+    
+    sed -i "s/\${template_presenter_ip}/${presenter_ip}/g" ${app_path}/videoanalysiscarapp/graph_deploy.config
+    sed -i "s/\${template_presenter_port}/${presenter_port}/g" ${app_path}/videoanalysiscarapp/graph_deploy.config
+    return 0
+}
 
 function main()
 {
-    if [[ $# -lt 3 ]];then
-        echo "ERROR: invalid command, please check your command format: ./prepare_param.sh host_ip presenter_view_app_name channel1 [channel2]."
-        exit 1
-    fi
+    echo "Modify presenter server configuration..."
     check_ip_addr ${remote_host}
     if [[ $? -ne 0 ]];then
-        echo "ERROR: invalid host ip, please check your command format: ./prepare_param.sh host_ip presenter_view_app_name channel1 [channel2]."
+        echo "ERROR: invalid host ip, please check your command format: ./prepare_graph.sh host_ip [download_mode(local/internet)]."
         exit 1
     fi
-
-    echo "Prepare app configuration..."
-    cp -r ${script_path}/videoanalysiscarapp/graph_deploy.config ${script_path}/videoanalysiscarapp/out/graph.config
-    sed -i "s#\${template_channel1}#${channel1}#g" ${script_path}/videoanalysiscarapp/out/graph.config
-    sed -i "s#\${template_channel2}#${channel2}#g" ${script_path}/videoanalysiscarapp/out/graph.config
-    sed -i "s/\${template_app_name}/${presenter_view_app_name}/g" ${script_path}/videoanalysiscarapp/out/graph.config
-    
-    parse_remote_port
-    
-    upload_file ${script_path}/videoanalysiscarapp/out/graph.config "~/HIAI_PROJECTS/ascend_workspace/videoanalysiscarapp/out"
+    bash ${script_path}/prepare_presenter_server.sh ${remote_host} ${download_mode}
     if [[ $? -ne 0 ]];then
-        echo "ERROR: sync ${script_path}/videoanalysiscarapp/graph.config ${remote_host}:./HIAI_PROJECTS/ascend_workspace/videoanalysiscarapp/out failed, please check /var/log/syslog for details."
         exit 1
     fi
-    echo "Finish to prepare videoanalysiscarapp params."
+    
+    modify_graph
+    if [[ $? -ne 0 ]];then
+        exit 1
+    fi
+    
+    echo "Finish to prepare videoanalysiscarapp graph."
     exit 0
 }
 
-main $*
+main

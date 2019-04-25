@@ -38,70 +38,68 @@ script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 remote_host=$1
 download_mode=$2
 
-common_path="${script_path}/../../common"
+app_name="videoanalysiscarapp"
 
-. ${common_path}/utils/scripts/func_deploy.sh
-. ${common_path}/utils/scripts/func_util.sh
+. ${script_path}/script/func_deploy.sh
+. ${script_path}/script/func_util.sh
 
-
-# ************************deploy ***********************************************
-# Description:  upload a file
-# $1: videoanalysisapp
-# $2: app path(absolute)
-# $3: common path(absolute)
-# $4: remote_host(host ip)
-# $5: download_mode(local-do with local mode, internet-download data from internet)
-# ******************************************************************************
-function deploy_videoanalysis()
+function deploy_app()
 {
     #set remote_port
     parse_remote_port
 
     #build common
     echo "[Step] Build common libs..."
-    bash ${common_path}/build.sh
+    bash ${script_path}/script/build_ezdvpp.sh ${download_mode}
+    if [[ $? -ne 0 ]];then
+        return 1
+    fi
+
+    bash ${script_path}/script/build_presenteragent.sh ${download_modes}
     if [[ $? -ne 0 ]];then
         return 1
     fi
 
     echo "[Step] Build FFmpeg libs..."
-    bash ${script_path}/build_ffmpeg.sh ${download_mode}
+    bash ${script_path}/script/build_ffmpeg.sh ${download_mode}
     if [[ $? -ne 0 ]];then
         return 1
     fi
     
     #build app
     echo "[Step] Build app libs..."
-    bash ${script_path}/build.sh
+    bash ${script_path}/script/build.sh
     if [[ $? -ne 0 ]];then
         return 1
     fi
 
-    #prepare_model.sh:
-    echo "[Step] Prepare models..."
-    if [[ ${download_mode} == "local" ]];then
-        model_version="local"
-    else
-        model_version=`grep VERSION ${DDK_HOME}/ddk_info | awk -F '"' '{print $4}'`
+    #prepare_model.sh: download_mode
+    if [[ ${download_mode} != "none" ]];then
+        echo "[Step] Prepare models..."
+        if [[ ${download_mode} == "local" ]];then
+            model_version="local"
+        else
+            model_version=`grep VERSION ${DDK_HOME}/ddk_info | awk -F '"' '{print $4}'`
+            if [[ $? -ne 0 ]];then
+                echo "ERROR: can not get version in ${DDK_HOME}/ddk_info, please check your env."
+                return 1
+            fi
+        fi
+        bash ${script_path}/script/prepare_model.sh ${model_version}
         if [[ $? -ne 0 ]];then
-            echo "ERROR: can not get version in ${DDK_HOME}/ddk_info, please check your env."
             return 1
         fi
-    fi
-    bash ${script_path}/prepare_model.sh ${model_version}
-    if [[ $? -ne 0 ]];then
-        return 1
     fi
 
     #deploy common libs
     echo "[Step] Deploy common libs..."
-    bash ${common_path}/deploy.sh ${remote_host}
+    bash ${script_path}/script/deploy_sdk.sh ${remote_host}
     if [[ $? -ne 0 ]];then
         return 1
     fi
 
     echo "[Step] Deploy ffmpeg libs..."
-    upload_tar_file "${script_path}/ffmpeg_lib.tar" "~/HIAI_PROJECTS/ascend_lib"
+    upload_tar_file "${script_path}/script/ffmpeg_lib.tar" "~/HIAI_PROJECTS/ascend_lib"
     if [[ $? -ne 0 ]];then
         return 1
     fi
@@ -124,15 +122,10 @@ function deploy_videoanalysis()
         fi
     fi
 
-    if [ -d ${script_path}/videoanalysisapp/out ];then
+    if [ -d ${script_path}/${app_name}/out ];then
         echo "[Step] Deploy app libs..."
-        upload_path ${script_path}/videoanalysisapp/out "~/HIAI_PROJECTS/ascend_workspace/videoanalysisapp/out"
+        deploy_app_lib_path ${app_name} ${script_path} ${remote_host}
         if [[ $? -ne 0 ]];then
-            return 1
-        fi
-        iRet=`IDE-daemon-client --host ${remote_host}:${remote_port} --hostcmd "chmod +x ~/HIAI_PROJECTS/ascend_workspace/videoanalysisapp/out/ascend_videoanalysisapp"`
-        if [[ $? -ne 0 ]];then
-            echo "ERROR: change excution mode ${remote_host}:./HIAI_PROJECTS/ascend_workspace/videoanalysisapp/out/* failed, please check /var/log/syslog for details."
             return 1
         fi
     fi
@@ -147,14 +140,14 @@ main()
         exit 1
     fi
     
-    deploy_videoanalysis
+    deploy_app
     if [[ $? -ne 0 ]];then
         exit 1
     fi
     
     echo "[Step] Prepare presenter server information and graph.confg..."
-    bash ${script_path}/prepare_graph.sh ${remote_host} ${download_mode}
-    echo "Finish to deploy videoanalysisapp."
+    bash ${script_path}/script/prepare_graph.sh ${remote_host} ${download_mode}
+    echo "Finish to deploy videoanalysiscarapp."
     exit 0
 }
 

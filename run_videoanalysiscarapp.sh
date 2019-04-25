@@ -40,10 +40,8 @@ presenter_view_app_name=$2
 channel1=$3
 channel2=$4
 
-common_path="${script_path}/../../common"
-
-. ${common_path}/utils/scripts/func_util.sh
-. ${common_path}/utils/scripts/func_deploy.sh
+. ${script_path}/script/func_util.sh
+. ${script_path}/script/func_deploy.sh
 
 function kill_remote_running()
 {
@@ -73,7 +71,7 @@ function main()
         exit 1
     fi
 
-    bash ${script_path}/prepare_param.sh ${remote_host} ${presenter_view_app_name} ${channel1} ${channel2}
+    bash ${script_path}/script/prepare_param.sh ${remote_host} ${presenter_view_app_name} ${channel1} ${channel2}
     if [[ $? -ne 0 ]];then
         exit 1
     fi
