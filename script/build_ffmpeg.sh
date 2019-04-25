@@ -41,7 +41,7 @@ ffmpeg_version="n4.1.2"
 function download_code()
 {
     if [ -d ${script_path}/ffmpeg ];then
-        echo "FFmpeg code have been downloaded, skip download work..."
+        echo "FFmpeg code is found..."
         return 0
     else
         if [[ ${download_mode} == "local" ]];then
