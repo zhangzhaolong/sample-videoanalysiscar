@@ -12,4 +12,4 @@ First, you must ensure "python3.5" is install in your ubuntu environment.
 # Go to the source code directory and run the python program.
 3. python3.5 presenter_server.py --app=video_analysis_car
 
-4. Open your browser(only support Chrome now), and visit the website, for example: http:192.168.1.100:7007
+4. Open your browser(only support Chrome now), and visit the website, for example: http:192.168.1.100:7005
