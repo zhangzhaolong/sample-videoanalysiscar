@@ -21,7 +21,7 @@
 #   =======================================================================
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-app_name="video_analysis"
+app_name="video_analysis_car"
 remote_host=$1
 download_mode=$2
 
@@ -136,10 +136,10 @@ function main()
     parse_presenter_view_ip
     
     echo "Use ${presenter_atlasdk_ip} to connect to Atlas DK Developerment Board..."
-    sed -i "s/presenter_server_ip=[0-9.]*/presenter_server_ip=${presenter_atlasdk_ip}/g" ${app_path}/presenterserver/${app_name}/config/config.conf
+    sed -i "s/presenter_server_ip=[0-9.]*/presenter_server_ip=${presenter_atlasdk_ip}/g" ${app_path}/presenterserver/video_analysis/config/config.conf
     
     echo "Use ${presenter_view_ip} to show information in browser..."
-    sed -i "s/web_server_ip=[0-9.]*/web_server_ip=${presenter_view_ip}/g" ${app_path}/presenterserver/${app_name}/config/config.conf
+    sed -i "s/web_server_ip=[0-9.]*/web_server_ip=${presenter_view_ip}/g" ${app_path}/presenterserver/video_analysis/config/config.conf
 
     while [ ${presenter_server_storage_path}"X" == "X" ]
     do
@@ -151,7 +151,7 @@ function main()
 
     done
     echo "Use ${presenter_server_storage_path} to store video analysis data..."
-    sed -i "s#^storage_dir=.*\$#storage_dir=${presenter_server_storage_path}#g" ${app_path}/presenterserver/${app_name}/config/config.conf
+    sed -i "s#^storage_dir=.*\$#storage_dir=${presenter_server_storage_path}#g" ${app_path}/presenterserver/video_analysis/config/config.conf
     
 
     echo "Finish to prepare video analysis car presenter server configuration."

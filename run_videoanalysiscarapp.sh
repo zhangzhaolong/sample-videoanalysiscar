@@ -76,7 +76,7 @@ function main()
         exit 1
     fi
     
-    presenter_server_pid=`ps -ef | grep "presenter_server\.py" | grep "video_analysis" | awk -F ' ' '{print $2}'`
+    presenter_server_pid=`ps -ef | grep "presenter_server\.py" | grep "video_analysis_car" | awk -F ' ' '{print $2}'`
     if [[ ${presenter_server_pid}"X" == "X" ]];then
         echo "presenter server for video analysis is not started, please start it."
         exit 1
