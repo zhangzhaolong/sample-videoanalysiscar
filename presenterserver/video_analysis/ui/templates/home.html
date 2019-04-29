@@ -623,16 +623,19 @@
             var personConfidenceList = [];
 			var faceAttrList = [];
             var faceConfidenceList = [];
-            var confidence = new Number(card.confidence);
+            var confidence = new Number(card.confidence * 100).toFixed(1);
+			confidence += "%";
             if(flag == "person"){
                 $.each(attrlist,function(i,attr){
                     var tmplist = attr.split(":");
+					tmplist[1] = new Number(tmplist[1] * 100).toFixed(1);
+					tmplist[1] += "%s";
                     personAttrList.push(tmplist[0]);
                     personConfidenceList.push(tmplist[1]);
                 });
                 videoapp.$data.card={
                     id:card.id,//title
-                    confidence:confidence.toFixed(3),//sub title
+					confidence:confidence,
                     attrlist:personAttrList,
                     confidencelist:personConfidenceList
                 };
@@ -642,6 +645,8 @@
                     if((i+1)%2 == 0){
                         var tmplist = attr.split(":");
                         attr = tmplist[1];
+						attr = new Number(attr * 100).toFixed(1);
+						attr += "%s";
                         carConfidenceList.push(attr);
                     }
                     else{
@@ -650,7 +655,7 @@
                 });
                 videoapp.$data.carcard={
                     id:card.id,//title
-                    confidence:confidence.toFixed(3),//sub title
+					confidence:confidence,
                     attrlist:carAttrList,
                     confidencelist:carConfidenceList
                 };
@@ -660,6 +665,8 @@
                     if((i+1)%2 == 0){
                         var tmplist = attr.split(":");
                         attr = tmplist[1];
+						attr = new Number(attr * 100).toFixed(1);
+						attr += "%s";
                         faceConfidenceList.push(attr);
                     }
                     else{
@@ -668,7 +675,7 @@
                 });
                 videoapp.$data.facecard={
                     id:card.id,//title
-                    confidence:confidence.toFixed(3),//sub title
+					confidence:confidence,
                     attrlist:faceAttrList,
                     confidencelist:faceConfidenceList
                 };
