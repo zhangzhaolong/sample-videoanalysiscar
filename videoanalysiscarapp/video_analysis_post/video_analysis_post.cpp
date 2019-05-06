@@ -408,7 +408,7 @@ HIAI_IMPL_ENGINE_PROCESS("video_analysis_post", VideoAnalysisPost, INPUT_SIZE) {
   // if all channel transmissions are completed,then exit app
   if ((image_ret_ == kExitApp) && (car_type_ret_ == kExitApp)
       && (car_color_ret_ == kExitApp) && (car_plate_ret_ == kExitApp)) {
-    HIAI_ENGINE_LOG("[VideoAnalysePost]app will exit...");
+    HIAI_ENGINE_LOG("[VideoAnalysePost] app will exit...");
     shared_ptr<string> result_data(new string);
     SendData(0, "string", static_pointer_cast<void>(result_data));
   }
