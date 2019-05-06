@@ -273,11 +273,11 @@ HIAI_StatusT ObjectDetectionPostProcess::HandleResults(
 
   // send finished datas to all output port.
   if (inference_result->video_image.video_image_info.is_finished) {
-    HIAI_ENGINE_LOG(HIAI_DEBUG_INFO, "[ODPostProcess] input video finished");
+    HIAI_ENGINE_LOG("[ODPostProcess] input video finished");
     SendResults(kPortPost, "VideoDetectionImageParaT",
                 static_pointer_cast<void>(detection_image));
 
-    for (uint32_t port = kPortCarType; port < OUTPUT_SIZE - 1; ++port) {
+    for (uint32_t port = kPortCarType; port < OUTPUT_SIZE; ++port) {
       shared_ptr<BatchCroppedImageParaT> batch_out = make_shared<
           BatchCroppedImageParaT>();
       batch_out->video_image_info = inference_result->video_image

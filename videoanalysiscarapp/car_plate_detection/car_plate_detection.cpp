@@ -485,6 +485,7 @@ HIAI_IMPL_ENGINE_PROCESS("car_plate_detection", CarPlateDetection, INPUT_SIZE) {
 
   // the input data is finished
   if (image_input->video_image_info.is_finished) {
+    HIAI_ENGINE_LOG("[CarPlateDetection] get is_finished data!");
     return SendDetectionResult(image_input);
   }
 

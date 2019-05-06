@@ -107,9 +107,9 @@ class VideoAnalysisPost : public hiai::Engine {
         app_config_(nullptr),
         agent_channel_(nullptr),
         image_ret_(kOperationOk),
-        car_type_ret_(kExitApp),
-        car_color_ret_(kExitApp),
-        car_plate_ret_(kExitApp) {
+        car_type_ret_(kOperationOk),
+        car_color_ret_(kOperationOk),
+        car_plate_ret_(kOperationOk) {
   }
 
   /**
