@@ -43,7 +43,7 @@
 1.  以Mind Studio安装用户进入videoanalysis应用代码所在根目录，如_**/home/ascend/sample-videoanalysiscar**_。
 2.  <a name="zh-cn_topic_0167339279_li08019112542"></a>执行部署脚本，进行工程环境准备，包括ascenddk公共库的编译与部署、网络模型的下载、Presenter Server服务器的配置等操作。
 
-    **bash deploy.sh **_host\_ip_ _model\_mode_
+    **bash deploy.sh** _host\_ip_ _model\_mode_
 
     -   _host\_ip_：对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host侧的IP地址。
 
@@ -138,7 +138,7 @@
 
     命令示例：
 
-    **bash stop\_videoanalysiscarapp.sh **_192.168.1.2_
+    **bash stop\_videoanalysiscarapp.sh** _192.168.1.2_
 
 -   **停止Presenter Server服务**
 
