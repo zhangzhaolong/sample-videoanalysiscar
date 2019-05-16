@@ -1,3 +1,5 @@
+EN|[CN](README_cn.md)
+
 Developers can deploy the application on the Atlas 200 DK AI acceleration cloud server to decode the local MP4 file or RTSP video streams, detect vehicles in video frames, predict their attributes, generate structured information, and send the structured information to the server for storage and display.
 
 ## Prerequisites<a name="en-us_topic_0167343881_section412314183119"></a>
