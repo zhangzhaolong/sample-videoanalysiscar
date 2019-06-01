@@ -56,10 +56,11 @@ function kill_remote_running()
     iRet=$(IDE-daemon-client --host ${remote_host}:${remote_port} --hostcmd "for p in \`pidof ascend_videoanalysiscarapp\`; do { echo \"kill \$p\"; kill \$p; }; done")
     if [[ $? -ne 0 ]];then
         echo "ERROR: kill ${remote_host}:ascend_videoanalysiscarapp running failed, please login to kill it manually."
+	return 1
     else
         echo "$iRet in ${remote_host}."
     fi
-    exit
+    return 0
 }
 
 trap 'kill_remote_running' 2 15
