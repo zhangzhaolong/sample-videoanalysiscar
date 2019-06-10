@@ -85,10 +85,7 @@ function parse_presenter_view_ip()
     for ip_info in `/sbin/ip addr | grep "inet " | awk -F ' ' '{print $2}'`
     do
         ip=`echo ${ip_info} | awk -F '/' '{print $1}'`
-
-        if [[ ${ip} != ${presenter_atlasdk_ip} ]];then
-            valid_view_ips="${valid_view_ips}\t${ip}\n"
-        fi
+        valid_view_ips="${valid_view_ips}\t${ip}\n"
     done
 
     while [[ ${presenter_view_ip}"X" == "X" ]]
