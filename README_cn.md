@@ -100,7 +100,7 @@
 
     在“/home/ascend/sample-videoanalysiscar“目录下执行如下命令运行Video Analysis应用程序。
 
-    **bash run\_videoanalysiscarapp.sh** _host\_ip_ _ __presenter\_view\_appname__ channel1_ _\[channel2\]_   &
+    **bash run\_videoanalysiscarapp.sh** _host\_ip_ _presenter\_view\_appname_ _channel1_ _\[channel2\]_   &
 
     -   _host\_ip_：对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host侧的IP地址。
     -   _presenter\_view\_app\_name_：用户自定义的在PresenterServer界面展示的View Name。

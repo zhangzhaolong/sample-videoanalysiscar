@@ -100,7 +100,7 @@ Before running the application, obtain the source code package and configure the
 
     Run the following command in the  **/home/ascend/sample-videoanalysiscar**  directory to start the video analysis application:
 
-    **bash run\_videoanalysiscarapp.sh** _host\_ip_ _ __presenter\_view\_appname__ channel1_ _\[channel2\]_  &
+    **bash run\_videoanalysiscarapp.sh** _host\_ip_ _presenter\_view\_appname_ _channel1_ _\[channel2\]_  &
 
     -   _host\_ip_: For the Atlas 200 DK developer board, this parameter indicates the IP address of the developer board.For the AI acceleration cloud server, this parameter indicates the IP address of the host.
     -   _presenter\_view\_app\_name_: Indicates  **View Name**  displayed on the Presenter Server page, which is user-defined.
