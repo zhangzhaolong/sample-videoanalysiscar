@@ -134,7 +134,7 @@
 
     **bash stop\_videoanalysiscarapp.sh** _host\_ip_
 
-    _host\_ip：_对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host的IP地址。。
+    _host\_ip_: 对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host的IP地址。。
 
     命令示例：
 
