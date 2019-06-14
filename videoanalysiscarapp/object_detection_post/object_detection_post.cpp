@@ -190,8 +190,8 @@ HIAI_StatusT ObjectDetectionPostProcess::CropObjectFromImage(
   target_img.channel = src_img.channel;
   target_img.format = src_img.format;
   target_img.data.reset(dvpp_out.buffer, default_delete<uint8_t[]>());
-  target_img.width = dest_width;
-  target_img.height = dest_height;
+  target_img.width = dest_resolution_width;
+  target_img.height = dest_resolutiont_height;
   target_img.size = dvpp_out.size;
 
   return HIAI_OK;
@@ -324,8 +324,8 @@ HIAI_StatusT ObjectDetectionPostProcess::HandleResults(
   HIAI_StatusT send_ret = SendDetectImage(detection_image);
   if (send_ret != HIAI_OK) {
     HIAI_ENGINE_LOG(HIAI_ENGINE_RUN_ARGS_NOT_RIGHT,
-                    "[ODPostProcess] send image error channel: %d, frame: %d!",
-                    detection_image->image.video_image_info.channel_id,
+                    "[ODPostProcess] send image error channel: %s, frame: %d!",
+                    detection_image->image.video_image_info.channel_id.c_str(),
                     detection_image->image.video_image_info.frame_id);
   }
 
