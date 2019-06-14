@@ -442,8 +442,8 @@ HIAI_StatusT CarPlateDetection::CropObjectFromImage(
   target_img.channel = src_img.channel;
   target_img.format = src_img.format;
   target_img.data.reset(dvpp_out.buffer, default_delete<uint8_t[]>());
-  target_img.width = dest_width;
-  target_img.height = dest_height;
+  target_img.width = dest_resolution_width;
+  target_img.height = dest_resolutiont_height;
   target_img.size = dvpp_out.size;
 
   return HIAI_OK;
