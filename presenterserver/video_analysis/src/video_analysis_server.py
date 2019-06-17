@@ -53,6 +53,7 @@ CHANNEL_NAME_FILE = "channel_name.txt"
 SERVER_TYPE = "video_analysis"
 CHECK_INTERCAL = 100
 MAX_SUB_DIRECTORY_NUM = 30000
+FRAME_GAP = 5
 
 class VideoAnalysisServer(PresenterSocketServer):
     '''Video Analysis Server'''
@@ -236,14 +237,18 @@ class VideoAnalysisServer(PresenterSocketServer):
                 self.send_message(conn, response, msg_name)
                 return False
 
-        stack_index = frame_num // MAX_SUB_DIRECTORY_NUM
+        stack_index = int(frame_id) // (MAX_SUB_DIRECTORY_NUM * FRAME_GAP)
         stack_directory = "stack_{}/".format(stack_index)
         frame = stack_directory + frame_id
-        frame_dir = os.path.join(self.storage_dir, app_id, channel_id, frame)
-        if not self._save_image(frame_dir, frame_image):
-            self._response_error_unknown(conn)
-            logging.error("save_image: %s error.", frame_dir)
-            return False
+        frame_dir = os.path.join(self.storage_dir, app_id, channel_id, frame)	
+	
+        image_file = os.path.join(frame_dir, IMAGE_FILE)
+        if not os.path.exists(image_file):   
+            if not self._save_image(frame_dir, frame_image):
+                self._response_error_unknown(conn)
+                logging.error("save_image: %s error.", frame_dir)
+                return False
+            self.app_manager.increase_frame_num(app_id, channel_id)
 
         app_dir = os.path.join(self.storage_dir, app_id)
         self._save_channel_name(app_dir, channel_id, channel_name)
@@ -260,8 +265,6 @@ class VideoAnalysisServer(PresenterSocketServer):
                 self._response_error_unknown(conn)
                 logging.error("save image: %s error.", object_dir)
                 return False
-
-        self.app_manager.increase_frame_num(app_id, channel_id)
 
         self.app_manager.set_heartbeat(conn.fileno())
         response.ret = pb2.kErrorNone
@@ -300,8 +303,9 @@ class VideoAnalysisServer(PresenterSocketServer):
         channel_dir = os.path.join(self.storage_dir, app_id, channel_id)
         stack_list = os.listdir(channel_dir)
         stack_list.sort()
-        current_stack = stack_list[-1]
-        object_dir = os.path.join(channel_dir, current_stack, frame_id, object_id)
+        current_stack = int(frame_id) // (MAX_SUB_DIRECTORY_NUM * FRAME_GAP)
+        stack_directory = "stack_{}/".format(current_stack)
+        object_dir = os.path.join(channel_dir, stack_directory, frame_id, object_id)
         if request.type == pb2.kCarColor:
             inference_dict["color_confidence"] = request.confidence
             inference_dict["color"] = request.value
@@ -357,8 +361,9 @@ class VideoAnalysisServer(PresenterSocketServer):
         channel_dir = os.path.join(self.storage_dir, app_id, channel_id)
         stack_list = os.listdir(channel_dir)
         stack_list.sort()
-        current_stack = stack_list[-1]
-        object_dir = os.path.join(channel_dir, current_stack, frame_id, object_id)
+        current_stack = int(frame_id) // (MAX_SUB_DIRECTORY_NUM * FRAME_GAP)
+        stack_directory = "stack_{}/".format(current_stack)
+        object_dir = os.path.join(channel_dir, stack_directory, frame_id, object_id)
 
         inference_dict["property"] = {}
         for item in request.human_property:
@@ -404,8 +409,9 @@ class VideoAnalysisServer(PresenterSocketServer):
         channel_dir = os.path.join(self.storage_dir, app_id, channel_id)
         stack_list = os.listdir(channel_dir)
         stack_list.sort()
-        current_stack = stack_list[-1]
-        object_dir = os.path.join(channel_dir, current_stack, frame_id, object_id)
+        current_stack = int(frame_id) // (MAX_SUB_DIRECTORY_NUM * FRAME_GAP)
+        stack_directory = "stack_{}/".format(current_stack)
+        object_dir = os.path.join(channel_dir, stack_directory, frame_id, object_id)
         if request.type == pb2.kFaceAge:
             inference_dict["age_confidence"] = request.confidence
             inference_dict["age"] = request.value
