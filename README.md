@@ -15,7 +15,7 @@ Before running the application, obtain the source code package and configure the
 
 1.  Obtain the source code package.
 
-    Download all the code in the sample-facedetection repository at  [https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)  to any directory on Ubuntu Server where Mind Studio is located as the Mind Studio installation user, for example,  _/home/ascend/sample-videoanalysiscar_.
+    Download all the code in the sample-videoanalysiscar repository at  [https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)  to any directory on Ubuntu Server where Mind Studio is located as the Mind Studio installation user, for example,  _/home/ascend/sample-videoanalysiscar_.
 
 2.  Log in to Ubuntu Server where Mind Studio is located as the Mind Studio installation user and set the environment variable  **DDK\_HOME**.
 
@@ -40,7 +40,7 @@ Before running the application, obtain the source code package and configure the
 
 ## Deployment<a name="en-us_topic_0167343881_section254863302012"></a>
 
-1.  Access the root directory where the video analysis application code is located as the Mind Studio installation user, for example,  _**/home/ascend/sample-videoanalysiscar**_.
+1.  Access the root directory where the vehicle detection application code is located as the Mind Studio installation user, for example,  _**/home/ascend/sample-videoanalysiscar**_.
 2.  <a name="en-us_topic_0167343881_li08019112542"></a>Run the deployment script to prepare the project environment, including compiling and deploying the ascenddk public library, downloading the network model, and configuring Presenter Server.
 
     **bash deploy.sh** _host\_ip_ _model\_mode_
