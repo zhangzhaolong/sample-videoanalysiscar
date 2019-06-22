@@ -71,7 +71,7 @@ Before running the application, obtain the source code package and configure the
     **python3 presenterserver/presenter\_server.py --app video\_analysis\_car &**
 
     >![](doc/source/img/icon-note.gif) **NOTE:**   
-    >**presenter\_server.py**  is located in the  **presenterserve**  directory. You can run the  **python3 presenter\_server.py -h**  or  **python3 presenter\_server.py --help**  command in this directory to view the usage method of  **presenter\_server.py**.  
+    >**presenter\_server.py**  is located in the  **presenterserver**  directory. You can run the  **python3 presenter\_server.py -h**  or  **python3 presenter\_server.py --help**  command in this directory to view the usage method of  **presenter\_server.py**.  
 
     [Figure 2](#en-us_topic_0167343881_fig69531305324)  shows that the presenter\_server service is started successfully.
 
