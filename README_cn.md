@@ -40,7 +40,7 @@
 
 ## 部署<a name="zh-cn_topic_0167339279_section1759513564117"></a>
 
-1.  以Mind Studio安装用户进入videoanalysis应用代码所在根目录，如_**/home/ascend/sample-videoanalysiscar**_。
+1.  以Mind Studio安装用户进入车辆检测应用代码所在根目录，如_**/home/ascend/sample-videoanalysiscar**_。
 2.  <a name="zh-cn_topic_0167339279_li08019112542"></a>执行部署脚本，进行工程环境准备，包括ascenddk公共库的编译与部署、网络模型的下载、Presenter Server服务器的配置等操作。
 
     **bash deploy.sh** _host\_ip_ _model\_mode_
@@ -153,7 +153,7 @@
     ascend 3655 20313 0 15:10 pts/24?? 00:00:00 python3 presenterserver/presenter_server.py --app video_analysis_car
     ```
 
-    如上所示_3655_即为车辆检测应用对应的Presenter Server服务的进程ID。
+    如上所示 _3655_ 即为车辆检测应用对应的Presenter Server服务的进程ID。
 
     若想停止此服务，执行如下命令：
 
