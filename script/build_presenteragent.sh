@@ -36,7 +36,7 @@
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
 download_mode=$1
-presenteragent_version="1.0.0"
+presenteragent_version="1.1.2"
 
 function download_code()
 {
