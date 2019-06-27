@@ -36,7 +36,7 @@
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
 download_mode=$1
-ezdvpp_version="1.0.0"
+ezdvpp_version="1.1.0"
 
 function download_code()
 {
