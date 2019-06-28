@@ -6,8 +6,8 @@
 
 部署此Sample前，需要准备好以下环境：
 
--   已完成MindStudio的安装，详细请参考[Mind Studio安装指南](https://www.huawei.com/minisite/ascend/cn/filedetail_1.html)。
--   已完成Atlas 200 DK开发者板与Mind Studio的连接，交叉编译器的安装，SD卡的制作及基本信息的配置等，详细请参考[Atlas 200 DK使用指南](https://www.huawei.com/minisite/ascend/cn/filedetail_2.html)。
+-   已完成MindSpore Studio的安装，详细请参考[MindSpore Studio安装指南](https://www.huawei.com/minisite/ascend/cn/filedetail_1.html)。
+-   已完成Atlas 200 DK开发者板与MindSpore Studio的连接，交叉编译器的安装，SD卡的制作及基本信息的配置等，详细请参考[Atlas 200 DK使用指南](https://www.huawei.com/minisite/ascend/cn/filedetail_2.html)。
 
 ## 软件准备<a name="zh-cn_topic_0167339279_section8534138124114"></a>
 
@@ -15,9 +15,9 @@
 
 1.  获取源码包。
 
-    将[https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)仓中的代码以Mind Studio安装用户下载至Mind Studio所在Ubuntu服务器的任意目录，例如代码存放路径为：_/home/ascend/sample-videoanalysiscar_。
+    将[https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)仓中的代码以MindSpore Studio安装用户下载至MindSpore Studio所在Ubuntu服务器的任意目录，例如代码存放路径为：_/home/ascend/sample-videoanalysiscar_。
 
-2.  以Mind Studio安装用户登录Mind Studio所在Ubuntu服务器，并设置环境变量DDK\_HOME。
+2.  以MindSpore Studio安装用户登录MindSpore Studio所在Ubuntu服务器，并设置环境变量DDK\_HOME。
 
     **vim \~/.bashrc**
 
@@ -28,7 +28,7 @@
     **export LD\_LIBRARY\_PATH=$DDK\_HOME/uihost/lib**
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   XXX为Mind Studio安装用户，/home/XXX/tools为DDK默认安装路径。  
+    >-   XXX为MindSpore Studio安装用户，/home/XXX/tools为DDK默认安装路径。  
     >-   如果此环境变量已经添加，则此步骤可跳过。  
 
     输入:wq!保存退出。
@@ -40,7 +40,7 @@
 
 ## 部署<a name="zh-cn_topic_0167339279_section1759513564117"></a>
 
-1.  以Mind Studio安装用户进入车辆检测应用代码所在根目录，如_**/home/ascend/sample-videoanalysiscar**_。
+1.  以MindSpore Studio安装用户进入车辆检测应用代码所在根目录，如_**/home/ascend/sample-videoanalysiscar**_。
 2.  <a name="zh-cn_topic_0167339279_li08019112542"></a>执行部署脚本，进行工程环境准备，包括ascenddk公共库的编译与部署、网络模型的下载、Presenter Server服务器的配置等操作。
 
     **bash deploy.sh** _host\_ip_ _model\_mode_
@@ -48,16 +48,16 @@
     -   _host\_ip_：对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host侧的IP地址。
 
     -   model\_mode代表模型文件的部署方式，默认为internet。
-        -   local：若Mind Studio所在Ubuntu系统未连接网络，请使用local模式，执行此命令前，需要参考[网络模型及依赖代码库下载](#zh-cn_topic_0167339279_section13807155164319)将模型文件及依赖代码库的下载到“/sample-videoanalysiscar/script“目录下。
-        -   internet：若Mind Studio所在Ubuntu系统已连接网络，请使用internet模式，在线下载模型文件及依赖代码库的下载。
+        -   local：若MindSpore Studio所在Ubuntu系统未连接网络，请使用local模式，执行此命令前，需要参考[网络模型及依赖代码库下载](#zh-cn_topic_0167339279_section13807155164319)将模型文件及依赖代码库的下载到“/sample-videoanalysiscar/script“目录下。
+        -   internet：若MindSpore Studio所在Ubuntu系统已连接网络，请使用internet模式，在线下载模型文件及依赖代码库的下载。
 
 
     命令示例：
 
     **bash deploy.sh 192.168.1.2 internet**
 
-    -   当提示“Please choose one to show the presenter in browser\(default: 127.0.0.1\):“时，请输入在浏览器中访问Presenter Server服务所使用的IP地址（一般为访问Mind Studio的IP地址）。
-    -   当提示“Please input a absolute path to storage video analysis data:“时，请输入Mind Studio中已存在的绝对路径用于存储视频解析数据，此路径Mind Studio用户需要有读写权限。
+    -   当提示“Please choose one to show the presenter in browser\(default: 127.0.0.1\):“时，请输入在浏览器中访问Presenter Server服务所使用的IP地址（一般为访问MindSpore Studio的IP地址）。
+    -   当提示“Please input a absolute path to storage video analysis data:“时，请输入MindSpore Studio中已存在的绝对路径用于存储视频解析数据，此路径MindSpore Studio用户需要有读写权限。
 
     如[图1](#zh-cn_topic_0167339279_fig184321447181017)所示，请在“Current environment valid ip list“中选择通过浏览器访问Presenter Server服务使用的IP地址，并输入存储视频解析数据的路径。
 
@@ -130,7 +130,7 @@
 
     若要停止视频结构化应用程序，可执行如下操作。
 
-    以Mind Studio安装用户在sample-videoanalysiscar目录下执行如下命令：
+    以MindSpore Studio安装用户在sample-videoanalysiscar目录下执行如下命令：
 
     **bash stop\_videoanalysiscarapp.sh** _host\_ip_
 
@@ -144,7 +144,7 @@
 
     Presenter Server服务启动后会一直处于运行状态，若想停止视频结构化应用对应的Presenter Server服务，可执行如下操作。
 
-    以Mind Studio安装用户在Mind Studio所在服务器中执行如下命令查看视频结构化应用对应的Presenter Server服务的进程。
+    以MindSpore Studio安装用户在MindSpore Studio所在服务器中执行如下命令查看视频结构化应用对应的Presenter Server服务的进程。
 
     **ps -ef | grep presenter | grep video\_analysis\_car**
 

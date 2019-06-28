@@ -6,8 +6,8 @@ Developers can deploy the application on the Atlas 200 DK AI acceleration cloud 
 
 Before using an open source application, ensure that:
 
--   Mind Studio has been installed. For details, see  [Mind Studio Installation Guide](https://www.huawei.com/minisite/ascend/en/filedetail_1.html).
--   The Atlas 200 DK developer board has been connected to Mind Studio, the cross compiler has been installed, the SD card has been prepared, and basic information has been configured. For details, see  [Atlas 200 DK User Guide](https://www.huawei.com/minisite/ascend/en/filedetail_2.html).
+-   MindSpore Studio has been installed. For details, see  [MindSpore Studio Installation Guide](https://www.huawei.com/minisite/ascend/en/filedetail_1.html).
+-   The Atlas 200 DK developer board has been connected to MindSpore Studio, the cross compiler has been installed, the SD card has been prepared, and basic information has been configured. For details, see  [Atlas 200 DK User Guide](https://www.huawei.com/minisite/ascend/en/filedetail_2.html).
 
 ## Software Preparation<a name="en-us_topic_0167343881_section431629175317"></a>
 
@@ -15,9 +15,9 @@ Before running the application, obtain the source code package and configure the
 
 1.  Obtain the source code package.
 
-    Download all the code in the sample-videoanalysiscar repository at  [https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)  to any directory on Ubuntu Server where Mind Studio is located as the Mind Studio installation user, for example,  _/home/ascend/sample-videoanalysiscar_.
+    Download all the code in the sample-videoanalysiscar repository at  [https://github.com/Ascend/sample-videoanalysiscar](https://github.com/Ascend/sample-videoanalysiscar)  to any directory on Ubuntu Server where MindSpore Studio is located as the MindSpore Studio installation user, for example,  _/home/ascend/sample-videoanalysiscar_.
 
-2.  Log in to Ubuntu Server where Mind Studio is located as the Mind Studio installation user and set the environment variable  **DDK\_HOME**.
+2.  Log in to Ubuntu Server where MindSpore Studio is located as the MindSpore Studio installation user and set the environment variable  **DDK\_HOME**.
 
     **vim \~/.bashrc**
 
@@ -28,7 +28,7 @@ Before running the application, obtain the source code package and configure the
     **export LD\_LIBRARY\_PATH=$DDK\_HOME/uihost/lib**
 
     >![](doc/source/img/icon-note.gif) **NOTE:**   
-    >-   **XXX**  indicates the Mind Studio installation user, and  **/home/XXX/tools**  indicates the default installation path of the DDK.  
+    >-   **XXX**  indicates the MindSpore Studio installation user, and  **/home/XXX/tools**  indicates the default installation path of the DDK.  
     >-   If the environment variables have been added, skip this step.  
 
     Enter  **:wq!**  to save and exit.
@@ -40,7 +40,7 @@ Before running the application, obtain the source code package and configure the
 
 ## Deployment<a name="en-us_topic_0167343881_section254863302012"></a>
 
-1.  Access the root directory where the vehicle detection application code is located as the Mind Studio installation user, for example,  _**/home/ascend/sample-videoanalysiscar**_.
+1.  Access the root directory where the vehicle detection application code is located as the MindSpore Studio installation user, for example,  _**/home/ascend/sample-videoanalysiscar**_.
 2.  <a name="en-us_topic_0167343881_li08019112542"></a>Run the deployment script to prepare the project environment, including compiling and deploying the ascenddk public library, downloading the network model, and configuring Presenter Server.
 
     **bash deploy.sh** _host\_ip_ _model\_mode_
@@ -48,16 +48,16 @@ Before running the application, obtain the source code package and configure the
     -   _host\_ip_: For the Atlas 200 DK developer board, this parameter indicates the IP address of the developer board.For the AI acceleration cloud server, this parameter indicates the IP address of the host.
 
     -   _model\_mode_  indicates the deployment mode of the model file. The value can be  **local**  or **internet**. The default setting is  **internet**.
-        -   **local**: If the Ubuntu system where Mind Studio is located is not connected to the network, use the local mode. In this case, you need to have downloaded the model file and the dependent common code library to the  **sample-videoanalysiscar/script**  directory by referring to  [Downloading Network Models and Dependency Code Library](#en-us_topic_0167343881_section083811318334).
-        -   **internet**: If the Ubuntu system where Mind Studio is located is connected to the network, use the Internet mode. In this case, download the model file and  dependency code library online.
+        -   **local**: If the Ubuntu system where MindSpore Studio is located is not connected to the network, use the local mode. In this case, you need to have downloaded the model file and the dependent common code library to the  **sample-videoanalysiscar/script**  directory by referring to  [Downloading Network Models and Dependency Code Library](#en-us_topic_0167343881_section083811318334).
+        -   **internet**: If the Ubuntu system where MindSpore Studio is located is connected to the network, use the Internet mode. In this case, download the model file and  dependency code library online.
 
 
     Example command:
 
     **bash deploy.sh 192.168.1.2 internet**
 
-    -   When the message  **Please choose one to show the presenter in browser\(default: 127.0.0.1\):**  is displayed, enter the IP address used for accessing the Presenter Server service in the browser. Generally, the IP address is the IP address for accessing the Mind Studio service.
-    -   When the message  **Please input a absolute path to storage video analysis data:**  is displayed, enter the existing absolute path for storing video analysis data in Mind Studio. The Mind Studio user must have the read and write permissions.
+    -   When the message  **Please choose one to show the presenter in browser\(default: 127.0.0.1\):**  is displayed, enter the IP address used for accessing the Presenter Server service in the browser. Generally, the IP address is the IP address for accessing the MindSpore Studio service.
+    -   When the message  **Please input a absolute path to storage video analysis data:**  is displayed, enter the existing absolute path for storing video analysis data in MindSpore Studio. The MindSpore Studio user must have the read and write permissions.
 
     Select the IP address used by the browser to access the Presenter Server service in  **Current environment valid ip list**  and enter the path for storing video analysis data, as shown in  [Figure 1](#en-us_topic_0167343881_fig184321447181017).
 
@@ -130,7 +130,7 @@ Before running the application, obtain the source code package and configure the
 
     To stop the video analysis application, perform the following operations:
 
-    Run the following command in the  **sample-videoanalysiscar**  directory as the Mind Studio installation user:
+    Run the following command in the  **sample-videoanalysiscar**  directory as the MindSpore Studio installation user:
 
     **bash stop\_videoanalysiscarapp.sh** _host\_ip_
 
@@ -144,7 +144,7 @@ Before running the application, obtain the source code package and configure the
 
     The Presenter Server service is always in the running state after being started. To stop the Presenter Server service of the video structured analysis application, perform the following operations:
 
-    Run the following command to check the process of the Presenter Server service corresponding to the video structured analysis application as the Mind Studio installation user:
+    Run the following command to check the process of the Presenter Server service corresponding to the video structured analysis application as the MindSpore Studio installation user:
 
     **ps -ef | grep presenter | grep video\_analysis\_car**
 
