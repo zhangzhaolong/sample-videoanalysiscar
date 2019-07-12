@@ -63,7 +63,7 @@ CPP := g++
 local_shared_libs := \
 	matrix \
 	drvdevdrv \
-	drvdevmm \
+	devmm \
 	drvhdc_host \
 	mmpa \
 	crypto \
